@@ -23,6 +23,8 @@ Quirks:
       MixDensityMatrix.
     - decoherence channels are drawn as gates with
       dashed borders.
+    - initialisations are drawn as all-target gates
+      with dotted borders.
 
 The algorithm is basic; the circuit canvas is 
 partitioned into a (#qubits x #depth) grid and
@@ -63,7 +65,7 @@ from pyquest.initialisations import *
 
 '''
 TODO:
-    - custom labels for CompactU, SqrtSwap, RotateAroundAxis
+    - custom label for SqrtSwap
     - bespoke target graphic for CX as bullseye
 '''
 
@@ -215,7 +217,7 @@ Visual gate styling
 
 def get_gate_label(gate):
 
-    # channels get abbreviated
+    # all channels get abbreviated
     if isinstance(gate, Damping):
         return 'γ'
     if isinstance(gate, Dephasing):
@@ -229,7 +231,7 @@ def get_gate_label(gate):
     if isinstance(gate, MixDensityMatrix):
         return 'ρ'
 
-    # initialisations get abbreviated
+    # all initialisations get abbreviated
     if isinstance(gate, ZeroState):
         return '0'
     if isinstance(gate, BlankState):
@@ -244,6 +246,14 @@ def get_gate_label(gate):
     # measurements get abbreviated
     if isinstance(gate, M):
         return '↗'
+
+    # compactly specified unitaries are identical to general unitaries
+    if isinstance(gate, CompactU):
+        return 'U'
+
+    # rotations around vector v look like Rx,Ry,Rz
+    if isinstance(gate, RotateAroundAxis):
+        return 'Rv'
 
     # some gates have no labels
     if isinstance(gate, Swap):
